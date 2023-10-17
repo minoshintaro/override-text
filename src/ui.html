@@ -1,0 +1,115 @@
+<div class="l-container">
+  <div class="l-container_main">
+    <div class="c-inputArea">
+      <p>YAML</p>
+      <textarea id="data" name="data" rows="4" placeholder="- Title: &quot;Lorem ipsum&quot;
+  Text: &quot;Consectetur adipiscing elit.&quot;
+- Title: &quot;Ut enim&quot;
+  Text: &quot;Quis nostrud.<br>Exercitation.&quot;"></textarea>
+    </div>
+    <div class="c-actionArea">
+      <label class="c-checkBox">
+        <input type="checkbox" id="mode"><span>Repeat Data</span>
+      </label>
+      <button class="c-primaryButton" id="submit">Submit</button>
+    </div>
+  </div>
+  <div class="l-container_sub">
+    <button class="c-secondaryButton" id="cancel">Cancel</button>
+  </div>
+</div>
+
+<script>
+function hasValue(element) {
+  return element.value.trim() !== '';
+}
+
+window.onload = () => {
+  const textarea = document.getElementById('data');
+  const submitButton = document.getElementById('submit');
+  const setButtonState = () => submitButton.disabled = !hasValue(textarea);
+
+  textarea.focus();
+
+  textarea.addEventListener('input', setButtonState);
+  setButtonState();
+};
+
+document.getElementById('submit').onclick = () => {
+  const data = document.getElementById('data').value;
+  const mode = document.getElementById('mode').checked ? 'repeat' : 'once';
+  parent.postMessage({ pluginMessage: { type: 'submit', mode, data } }, '*')
+}
+
+document.getElementById('cancel').onclick = () => {
+  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
+}
+</script>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font: 400 12px/1.5 sans-serif; }
+  textarea {
+    resize: none;
+    width: 100%;
+    padding: 7px;
+    border-radius: 4px;
+    border: 1px solid silver;
+    background-color: #f5f5f5;
+    font: 400 12px/16px monospace;
+  }
+  button {
+    appearance: none;
+    border-radius: 4px;
+    border: none;
+    background: none;
+  }
+  input {
+    accent-color: #4597F7;
+  }
+
+  .l-container {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+  }
+  .l-container > * { padding-inline: 12px; }
+  .l-container_main {
+    padding-block: 6px 8px;
+    border-bottom: 1px solid #ddd;
+  }
+  .l-container_main > * + * {
+    margin-top: 8px;
+  }
+  .l-container_sub {
+    place-self: center;
+  }
+
+  .c-inputArea > * + * { margin-top: 4px; }
+  .c-actionArea {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    justify-items: end;
+    align-items: center;
+  }
+
+  .c-checkBox {
+    display: inline-grid;
+    grid-template-columns: auto auto;
+    gap: 0.5em;
+  }
+  .c-primaryButton {
+    height: 40px;
+    padding-inline: 20px;
+    /* background-color: #4597F7; */
+    background-color: #2C2C2C;
+    color: #fff;
+  }
+  .c-primaryButton:disabled {
+    background-color: #E6E6E6;
+  }
+
+  .c-primaryButton:not(:disabled):hover {
+    background-color: #4597F7;
+  }
+</style>
