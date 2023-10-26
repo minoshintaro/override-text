@@ -19,7 +19,7 @@ figma.ui.onmessage = (message) => {
     let processCount = 0;
 
     for (const instance of selectedInstance) {
-      if (message.mode === 'onece' && processCount >= limitNumber) break;
+      if (message.mode === 'once' && processCount >= limitNumber) break;
       if (instance.type !== 'INSTANCE') continue;
 
       const dataUnit = inputData[processCount];
